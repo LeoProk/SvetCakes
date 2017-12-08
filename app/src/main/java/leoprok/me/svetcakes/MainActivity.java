@@ -30,7 +30,6 @@ public class MainActivity extends AppCompatActivity {
         setTitle(R.string.call);
     }
 
-
     //set the menu
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -46,31 +45,30 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             //call when user click on the phone icon
             case R.id.call:
-                Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + R.string.phone));
-                //check if the permission is enabled
-                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                    startActivity(intent);
-                }else {
-                    ActivityCompat.requestPermissions(this,
-                            new String[]{Manifest.permission.CALL_PHONE},
-                            16);
-                }
-
+                ActivityCompat.requestPermissions(MainActivity.this,
+                        new String[]{Manifest.permission.CALL_PHONE},
+                        1);
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    //handales permission for android.permission.CALL_PHONE
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
         switch (requestCode) {
-            case 16: {
+            case 1: {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + R.string.phone));
+                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                        return;
+                    }
+                    startActivity(intent);
 
-                    // permission was granted, yay! Do the
-                    // contacts-related task you need to do.
+                }else{
 
                 }
                 return;
